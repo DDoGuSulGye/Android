@@ -4,6 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
+    <FrameLayout
+        android:id="@+id/expand_frame_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <ExpandableListView
+            android:id="@+id/expand_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFCACACA"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/expand_frame_end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <ExpandableListView
+            android:id="@+id/expand_end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFCACACA"/>
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/top_layer"
         android:layout_width="match_parent"
@@ -25,26 +53,43 @@
                 android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:orientation="vertical">
-                <EditText
-                    android:id="@+id/edittext_start"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_start"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="4"
+                    android:layout_height="40dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:hint="출발지 입력"
+                    android:text="출발지 선택"
                     android:textColor="#000"
                     android:background="#FFCACACA"/>
-                <EditText
-                    android:id="@+id/edittext_end"
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/button_end"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="4"
+                    android:layout_height="40dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:textColor="#000"
-                    android:hint="도착지 입력"
+                    android:text="도착지 선택"
                     android:background="#cacaca"/>
+
+
+            </LinearLayout>
         </LinearLayout>
         <ImageButton
             android:id="@+id/search_btn"

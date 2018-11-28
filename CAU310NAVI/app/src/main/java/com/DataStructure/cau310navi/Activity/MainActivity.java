@@ -2,12 +2,16 @@ package com.DataStructure.cau310navi.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,6 +23,8 @@ import com.DataStructure.cau310navi.Fragment.Wait_Fragment;
 import com.DataStructure.cau310navi.R;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by dkdk6 on 2018-11-18.
@@ -26,13 +32,16 @@ import java.sql.Time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     ImageButton bt1,bt2,bt3, change, search;
-    EditText start, end;
+    Button start, end;
     FragmentManager fm;
     FragmentTransaction tran;
     Elevator_Fragment elevator;
     Stair_Fragment stair;
     Time_Fragment time;
     Wait_Fragment wait;
+    ExpandableListView expand_start, expand_end;
+    FrameLayout expand_frame_start, expand_frame_end;
+    ArrayList<ParentData> data = new ArrayList<ParentData>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +52,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bt3 = (ImageButton) findViewById(R.id.bt3);
         change = (ImageButton) findViewById(R.id.change_btn);
         search = (ImageButton) findViewById(R.id.search_btn);
-        start = (EditText) findViewById(R.id.edittext_start);
-        end = (EditText) findViewById(R.id.edittext_end);
+        start = (Button) findViewById(R.id.button_start);
+        end = (Button) findViewById(R.id.button_end);
+        expand_start = (ExpandableListView) findViewById(R.id.expand_start);
+        expand_end = (ExpandableListView) findViewById(R.id.expand_end);
+        expand_frame_start = (FrameLayout) findViewById(R.id.expand_frame_start);
+        expand_frame_end = (FrameLayout) findViewById(R.id.expand_frame_end);
 
+        expand_start.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                start.setText(parent.getExpandableListAdapter().getChild(groupPosition, childPosition).toString());
+                expand_frame_start.setVisibility(View.GONE);
+                return true;
+            }
+        });
+
+        expand_end.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                end.setText(parent.getExpandableListAdapter().getChild(groupPosition, childPosition).toString());
+                expand_frame_end.setVisibility(View.GONE);
+                return false;
+            }
+        });
+
+        ParentData data1 = new ParentData("First");
+        data1.child.add("726");
+        data1.child.add("727");
+
+        ParentData data2 = new ParentData("Second");
+        data2.child.add("726");
+        data2.child.add("727");
+
+        data.add(data1);
+        data.add(data2);
+
+        ExpandAdapter expandAdapter = new ExpandAdapter(this, data);
+        expand_start.setAdapter(expandAdapter);
+        expand_end.setAdapter(expandAdapter);
+
+        start.setOnClickListener(this);
+        end.setOnClickListener(this);
         bt1.setOnClickListener(this);
         bt2.setOnClickListener(this);
         bt3.setOnClickListener(this);
@@ -70,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.change_btn:
                 //입력 Text 바꾸어주기
-                if(start.getText().toString() == null || end.getText().toString()==null){
+                if(start.getText().toString() == null || end.getText().toString() == null){
                     Toast d = Toast.makeText(getApplicationContext(), "모든 장소를 입력하세요", Toast.LENGTH_LONG); d.show();
                 }else{
                     String s_temp = start.getText().toString();
@@ -78,6 +126,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start.setText(e_temp);
                     end.setText(s_temp);
                 }
+                break;
+            case R.id.button_start:
+                expand_frame_start.setVisibility(View.VISIBLE);
+                break;
+            case R.id.button_end:
+                expand_frame_end.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -109,5 +163,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if(expand_frame_start.getVisibility() == View.VISIBLE || expand_frame_end.getVisibility() == View.VISIBLE){
+            expand_frame_start.setVisibility(View.GONE);
+            expand_frame_end.setVisibility(View.GONE);
+        } else {
+            moveTaskToBack(true);
+        }
+    }
 }
