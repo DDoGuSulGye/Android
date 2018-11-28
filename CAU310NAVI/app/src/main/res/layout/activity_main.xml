@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:weightSum="6"
+    android:orientation="vertical"
+    android:gravity="center">
+
     <FrameLayout
         android:id="@+id/expand_frame_start"
         android:layout_width="match_parent"
@@ -13,6 +15,20 @@
 
         <ExpandableListView
             android:id="@+id/expand_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFCACACA"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/expand_frame_middle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <ExpandableListView
+            android:id="@+id/expand_middle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFCACACA"/>
@@ -43,16 +59,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:src="@drawable/icon_change"
             android:background="@android:color/transparent"
             />
         <LinearLayout
-                android:id="@+id/edittext_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:orientation="vertical">
+            android:id="@+id/edittext_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,6 +95,24 @@
                 android:layout_weight="4"
                 android:orientation="vertical">
                 <Button
+                    android:id="@+id/button_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="#000"
+                    android:text="경유지 선택"
+                    android:background="#cacaca"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:orientation="vertical">
+                <Button
                     android:id="@+id/button_end"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -95,63 +129,16 @@
             android:id="@+id/search_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
             android:src="@drawable/icon_search"
             android:background="@android:color/transparent"
             />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/bottom_layer"
+
+    <TimePicker
+        android:id="@+id/timePicker"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8.5"
-        android:background="#ffffff"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/bt1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:src="@drawable/icon_2"
-                android:background="@android:color/transparent"
-                android:text="전환1" />
-
-            <ImageButton
-                android:id="@+id/bt2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:src="@drawable/icon_1"
-                android:background="@android:color/transparent"
-                android:text="전환2" />
-
-            <ImageButton
-                android:id="@+id/bt3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:src="@drawable/icon_3"
-                android:background="@android:color/transparent"
-                android:text="전환3" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/main_frame"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"></FrameLayout>
-
-    </LinearLayout>
-
-
+        android:layout_height="100dp"
+        android:timePickerMode="spinner"></TimePicker>
 </LinearLayout>
