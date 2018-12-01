@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/expand_frame_start"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone">
 
@@ -17,7 +17,7 @@
             android:id="@+id/expand_start"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFCACACA"/>
+            android:background="#FFCACACA" />
     </FrameLayout>
 
     <FrameLayout
@@ -48,6 +48,11 @@
             android:background="#FFCACACA"/>
     </FrameLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="vertical">
     <LinearLayout
         android:id="@+id/top_layer"
         android:layout_width="match_parent"
@@ -136,9 +141,11 @@
             />
     </LinearLayout>
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:timePickerMode="spinner"></TimePicker>
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:timePickerMode="spinner"></TimePicker>
+    </LinearLayout>
+
 </LinearLayout>

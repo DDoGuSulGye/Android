@@ -1,6 +1,27 @@
 <resources>
     <string name="app_name">CAU310NAVI</string>
-    <string-array name="node">
+    <string-array name="underground6">
+        <item>B601</item>
+        <item>B602</item>
+        <item>B603</item>
+    </string-array>
+    <string-array name="underground5">
+        <item>B501</item>
+        <item>B502</item>
+    </string-array>
+    <string-array name="underground3">
+        <item>B309</item>
+        <item>B310</item>
+        <item>B311</item>
+        <item>B312</item>
+    </string-array>
+    <string-array name="underground2">
+        <item>B212</item>
+    </string-array>
+    <string-array name="underground1">
+        <item>B105</item>
+    </string-array>
+    <string-array name="ground3">
         <item>305</item>
         <item>310</item>
         <item>311</item>
@@ -8,6 +29,8 @@
         <item>315</item>
         <item>316</item>
         <item>321</item>
+    </string-array>>
+    <string-array name="ground4">
         <item>410</item>
         <item>412</item>
         <item>414</item>
@@ -17,6 +40,8 @@
         <item>420</item>
         <item>421</item>
         <item>422</item>
+    </string-array>
+    <string-array name="ground5">
         <item>502</item>
         <item>503</item>
         <item>505</item>
@@ -29,6 +54,8 @@
         <item>520</item>
         <item>521</item>
         <item>523</item>
+    </string-array>
+    <string-array name="ground6">
         <item>601</item>
         <item>602</item>
         <item>603</item>
@@ -44,6 +71,8 @@
         <item>620</item>
         <item>621</item>
         <item>622</item>
+    </string-array>
+    <string-array name="ground7">
         <item>701</item>
         <item>702</item>
         <item>703</item>
@@ -59,6 +88,8 @@
         <item>729</item>
         <item>730</item>
         <item>731</item>
+    </string-array>
+    <string-array name="ground8">
         <item>801</item>
         <item>802</item>
         <item>803</item>
@@ -66,6 +97,8 @@
         <item>809</item>
         <item>818</item>
         <item>819</item>
+    </string-array>
+    <string-array name="ground9">
         <item>920</item>
         <item>921</item>
         <item>922</item>
@@ -74,16 +107,5 @@
         <item>927</item>
         <item>928</item>
         <item>932</item>
-        <item>B105</item>
-        <item>B212</item>
-        <item>B309</item>
-        <item>B310</item>
-        <item>B311</item>
-        <item>B312</item>
-        <item>B501</item>
-        <item>B502</item>
-        <item>B601</item>
-        <item>B602</item>
-        <item>B603</item>
     </string-array>
 </resources>

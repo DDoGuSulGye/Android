@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.DataStructure.cau310navi.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,6 +64,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        expand_middle.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                middle.setText(parent.getExpandableListAdapter().getChild(groupPosition, childPosition).toString());
+                expand_frame_middle.setVisibility(View.GONE);
+                return true;
+            }
+        });
+
         expand_end.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -72,16 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        ParentData data1 = new ParentData("First");
-        data1.child.add("726");
-        data1.child.add("727");
-
-        ParentData data2 = new ParentData("Second");
-        data2.child.add("726");
-        data2.child.add("727");
-
-        data.add(data1);
-        data.add(data2);
+        setData();
 
         ExpandAdapter expandAdapter = new ExpandAdapter(this, data);
         expand_start.setAdapter(expandAdapter);
@@ -115,6 +116,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra("HOUR", timePicker.getHour());
                     intent.putExtra("MINUTE", timePicker.getMinute());
                 }
+                intent.putExtra("START", start.getText());
+
+                if(!middle.getText().equals("경유지 선택")) {
+                    intent.putExtra("MIDDLE", middle.getText());
+                }
+
+                intent.putExtra("END", end.getText());
                 startActivity(intent);
                 break;
             case R.id.button_start:
@@ -127,6 +135,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 expand_frame_end.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    private void setData() {
+        ParentData underground6 = new ParentData("지하6층");
+        underground6.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground6)));
+
+        ParentData underground5 = new ParentData("지하5층");
+        underground5.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground5)));
+
+        ParentData underground3 = new ParentData("지하3층");
+        underground3.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground3)));
+
+        ParentData underground2 = new ParentData("지하2층");
+        underground2.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground2)));
+
+        ParentData underground1 = new ParentData("지하1층");
+        underground1.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground1)));
+
+        ParentData ground3 = new ParentData("지상3층");
+        ground3.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground3)));
+
+        ParentData ground4 = new ParentData("지상4층");
+        ground4.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground4)));
+
+        ParentData ground5 = new ParentData("지상5층");
+        ground5.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground5)));
+
+        ParentData ground6 = new ParentData("지상6층");
+        ground6.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground6)));
+
+        ParentData ground7 = new ParentData("지상7층");
+        ground7.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground7)));
+
+        ParentData ground8 = new ParentData("지상8층");
+        ground8.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground8)));
+
+        ParentData ground9 = new ParentData("지상9층");
+        ground9.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground9)));
+
+        data.add(underground6);
+        data.add(underground5);
+        data.add(underground3);
+        data.add(underground2);
+        data.add(underground1);
+        data.add(ground3);
+        data.add(ground4);
+        data.add(ground5);
+        data.add(ground6);
+        data.add(ground7);
+        data.add(ground8);
+        data.add(ground9);
     }
 
     @Override
