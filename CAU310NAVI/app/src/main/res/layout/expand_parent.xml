@@ -9,6 +9,7 @@
         android:layout_height="50dp"
         android:text="parent"
         android:textColor="#000"
+        android:background="@drawable/textlines"
         android:textSize="20sp"/>
 
 </android.widget.LinearLayout>

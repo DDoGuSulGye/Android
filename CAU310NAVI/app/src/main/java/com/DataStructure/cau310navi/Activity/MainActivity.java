@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -55,6 +56,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             timePicker.setHour(date.getHours());
             timePicker.setMinute(date.getMinutes());
         }
+        expand_start.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if(groupPosition == 0) {
+                    start.setText("출발지 선택");
+                    expand_frame_start.setVisibility(View.GONE);
+                    return true;
+                } else
+                return false;
+            }
+        });
         expand_start.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -64,6 +76,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        expand_middle.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if(groupPosition == 0) {
+                    middle.setText("경유지 선택");
+                    expand_frame_middle.setVisibility(View.GONE);
+                    return true;
+                }
+                return false;
+            }
+        });
         expand_middle.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -73,6 +96,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        expand_end.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if(groupPosition == 0) {
+                    end.setText("도착지 선택");
+                    expand_frame_end.setVisibility(View.GONE);
+                    return true;
+                }
+                return false;
+            }
+        });
         expand_end.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -174,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ParentData ground9 = new ParentData("지상9층");
         ground9.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground9)));
 
+        ParentData cancel = new ParentData("취소");
+        data.add(cancel);
         data.add(underground6);
         data.add(underground5);
         data.add(underground3);
