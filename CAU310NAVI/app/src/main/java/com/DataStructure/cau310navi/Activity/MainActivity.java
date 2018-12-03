@@ -145,14 +145,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.search_btn :
+                Calendar cal = Calendar.getInstance();
                 Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                String day = new String("");
+                Integer hour = new Integer(0);
+                Integer minute = new Integer(0);
+                Integer classTime = new Integer(0);
+                boolean boomTime = false;
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    hour = timePicker.getHour();
+                    minute = timePicker.getMinute();
+                }
+
+                switch (cal.get(Calendar.DAY_OF_WEEK)){
+                    case 2 :
+                        day = "mon";
+                        break;
+                    case 3 :
+                        day = "tue";
+                        break;
+                    case 4 :
+                        day = "wed";
+                        break;
+                    case 5 :
+                        day = "thr";
+                        break;
+                    case 6 :
+                        day = "fri";
+                        break;
+                    default :
+                        day = "fri"; // default는 friday로
+                }
+
+                classTime = hour - 8;
+
+                if(classTime < 1 || classTime > 9){
+                    classTime = 9; // default는 9
+                }
+
+                if(minute >= 0 && minute <= 10){
+                    boomTime = true;
+                } else if(minute >= 40 && minute <60){
+                    classTime++;
+                    boomTime = true;
+                } else {
+                    boomTime = false;
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    intent.putExtra("DAY_OF_WEEK", day);
                     intent.putExtra("HOUR", timePicker.getHour());
                     intent.putExtra("MINUTE", timePicker.getMinute());
+                    intent.putExtra("BOOMTIME", boomTime);
+                    intent.putExtra("CLASSTIME", classTime);
                 }
                 intent.putExtra("START", start.getText());
 
-                if(!middle.getText().equals("경유지 선택")) {
+                if(middle.getText().equals("경유지 선택")) {
+                    intent.putExtra("MIDDLE", "");
+                } else{
                     intent.putExtra("MIDDLE", middle.getText());
                 }
 
@@ -178,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ParentData underground5 = new ParentData("지하5층");
         underground5.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground5)));
 
+        ParentData underground4 = new ParentData("지하4층");
+        underground4.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground4)));
+
         ParentData underground3 = new ParentData("지하3층");
         underground3.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground3)));
 
@@ -186,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ParentData underground1 = new ParentData("지하1층");
         underground1.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.underground1)));
+
+        ParentData ground1 = new ParentData("지상1층");
+        ground1.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground1)));
 
         ParentData ground3 = new ParentData("지상3층");
         ground3.child = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.ground3)));
@@ -212,9 +270,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         data.add(cancel);
         data.add(underground6);
         data.add(underground5);
+        data.add(underground4);
         data.add(underground3);
         data.add(underground2);
         data.add(underground1);
+        data.add(ground1);
         data.add(ground3);
         data.add(ground4);
         data.add(ground5);

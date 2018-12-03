@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.DataStructure.cau310navi.Data.DataHelper;
 import com.DataStructure.cau310navi.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by dkdk6 on 2018-11-18.
@@ -23,6 +26,8 @@ public class Elevator_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_elevator, container, false);
         LinearLayout topLL = (LinearLayout)view.findViewById(R.id.dynamicArea); //parent view
+
+        ArrayList<ArrayList<String>> data = ((DataHelper)getArguments().getSerializable("LIST")).getList();
 
         for(int i=0; i<3; i++){
             TextView topTV1 = new TextView(view.getContext());
