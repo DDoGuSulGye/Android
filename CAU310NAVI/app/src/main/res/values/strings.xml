@@ -12,15 +12,15 @@
         <item>B506남자화장실</item>
         <item>B502대형강의실-3</item>
         <item>B501대형강의실-1</item>
-        <item>B4도서관입구</item>
+        <item>B5도서관입구</item>
     </string-array>
     <string-array name="underground4">
         <item>B413우편취급국</item>
         <item>B412헤어엔유</item>
         <item>B405꽃집</item>
         <item>B404안경점</item>
-        <item>B3여자화장실</item>
-        <item>B3도서관입구</item>
+        <item>B4여자화장실</item>
+        <item>B4도서관입구</item>
         <item>B407카우버거</item>
         <item>B408제과점</item>
         <item>B410캐논</item>

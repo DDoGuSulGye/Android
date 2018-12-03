@@ -98,10 +98,8 @@ public class HorizontalAlgorithm {
         Map<String,Map<String,Double>> cityMap = new HashMap<>();
         String prevKeyName = null;
         try {
-            Log.i("DataSet", "DataSet호출 try시작");
             InputStream is = context.getResources().getAssets().open("test.xls");
             Workbook wb = Workbook.getWorkbook(is);
-            Log.d("wb", wb.toString());
             if (wb != null) {
                 Sheet sheet = wb.getSheet(i); //시트 불러오기 지4, 7 층 데이터
                 if (sheet != null) {
@@ -109,7 +107,6 @@ public class HorizontalAlgorithm {
                     int rowindexStart = 1;  //row인덱스 시작
                     int rowTotal = sheet.getRows();
 
-                    Log.i("DataSet", "DataSet호출 if문시작");
                     StringBuilder sb;
                     for (int row = rowindexStart; row < rowTotal; row++) {
                         String srcNode = sheet.getCell(0, row).getContents();
@@ -131,7 +128,6 @@ public class HorizontalAlgorithm {
                 }
             }
 
-            Log.i("DataSet", "값 입력 완료");
             //    Log.i("어레이값", allCityMap.get(0).toString());
         } catch(IOException e){
             e.printStackTrace();
@@ -223,9 +219,6 @@ public class HorizontalAlgorithm {
 
         path.add(0, startNode);
         path.add(String.valueOf(dijkstraMinimumDistance));
-        for(int i =0; i<path.size();i++){
-            Log.d("path@",path.get(i).toString());
-        }
         return path;
     }
 

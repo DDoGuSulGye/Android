@@ -3,9 +3,11 @@ package com.DataStructure.cau310navi.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +29,11 @@ import com.DataStructure.cau310navi.Fragment.Wait_Fragment;
 import com.DataStructure.cau310navi.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by dkdk6 on 2018-11-18.
@@ -44,8 +50,11 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
     DataPool dataPool;
     HorizontalAlgorithm horizontalAlgorithm;
-    ArrayList<ArrayList<String>> startToMiddle;
-    ArrayList<ArrayList<String>> middleToEnd;
+    ArrayList<ArrayList<String>> startToMiddleElevator;
+    ArrayList<ArrayList<String>> middleToEndElevator;
+
+    ArrayList<ArrayList<String>> startToMiddleStair;
+    ArrayList<ArrayList<String>> middleToEndStair;
 
     String day ;
     int hour ;
@@ -77,20 +86,35 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         setData(intent);
 
         if(middle.equals("")){ // 경유지 없을 때
-            startToMiddle = ddoGorithm_Elevator(start, end);
+            startToMiddleElevator = ddoGorithm_Elevator(start, end);
+
+            startToMiddleStair = ddoGorithm_Stair(start, end);
         } else{
-            startToMiddle = ddoGorithm_Elevator(start, middle);
-            middleToEnd = ddoGorithm_Elevator(middle, end);
+            startToMiddleElevator = ddoGorithm_Elevator(start, middle);
+            middleToEndElevator = ddoGorithm_Elevator(middle, end);
+
+            startToMiddleStair = ddoGorithm_Stair(start, middle);
+            middleToEndStair = ddoGorithm_Stair(middle, end);
         }
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("LIST", new DataHelper(startToMiddle));
-        elevator.setArguments(bundle);
+        Bundle bundle1 = new Bundle();
+        bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
+        bundle1.putSerializable("LIST2", new DataHelper(middleToEndElevator));
+        elevator.setArguments(bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
+        bundle2.putSerializable("LIST2", new DataHelper(middleToEndElevator));
+        stair.setArguments(bundle2);
 
         setFrag(3);
     }
 
     public int floorParser(String area){
+        if(area.equals("후문입구")){
+            return 1;
+        }
+
         if(area.charAt(0)=='B'){
             return -(Integer.parseInt(area.charAt(1)+""));
         }else{
@@ -116,18 +140,34 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<ArrayList<String>> ddoGorithm_Elevator(String start, String end) {
         ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
         if(floorParser(start) != floorParser(end)){ // 층수 다르면 수직이동이 포함된다.
 
-            ElevatorNode A = dataPool.setElevatorNode("A", day, -3, 9, 1, classTime);
+            ElevatorNode A = dataPool.setElevatorNode("A", day, -6, 9, 1, classTime);
             ElevatorNode B = dataPool.setElevatorNode("B", day, -3, 9, 1, classTime);
-            ElevatorNode C = dataPool.setElevatorNode("C", day, -6, 9, 1, classTime);
+            ElevatorNode C = dataPool.setElevatorNode("C", day, -3, 9, 1, classTime);
 
             Map<String,Map<String,Double>> cityMapStart = horizontalAlgorithm.getFloorCityMap(floorParser(start));
-            ElevatorNode optimalNode = dataPool.getOptimaleElevatorNode(A, B, C, start, floorParser(start), boomTime, horizontalAlgorithm, cityMapStart);
-
             Map<String,Map<String,Double>> cityMapEnd = horizontalAlgorithm.getFloorCityMap(floorParser(end));
+            HashMap<Integer, String> sameElevator = new HashMap<>();
+
+            for(Iterator iterator1 = cityMapStart.keySet().iterator() ; iterator1.hasNext();){
+                String keyName = (String)iterator1.next();
+                for(Iterator iterator2 = cityMapEnd.keySet().iterator() ; iterator2.hasNext();){
+                    if(keyName.equals((String)iterator2.next())){
+                        if(keyName.equals("A"))
+                            sameElevator.put(0, keyName);
+                        if(keyName.equals("B"))
+                            sameElevator.put(1, keyName);
+                        if(keyName.equals("C"))
+                            sameElevator.put(2, keyName);
+                    }
+                }
+            }
+
+            ElevatorNode optimalNode = dataPool.getOptimaleElevatorNode(A, B, C, start, sameElevator, boomTime, horizontalAlgorithm, cityMapStart);
             ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, optimalNode.getArea(), cityMapStart);
             ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
 
@@ -145,34 +185,81 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-//    public ArrayList<ArrayList<String>> ddoGorithm_Stair(String start, String end) {
-//        ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
-//        if(floorParser(start) != floorParser(end)){ // 층수 다르면 수직이동이 포함된다.
-//
-//            StairNode A = dataPool.setStairNode("A", day, -3, 9);
-//            StairNode B = dataPool.setStairNode("B", day, -3, 9);
-//            StairNode C = dataPool.setStairNode("C", day, -6, 9);
-//
-//            Map<String,Map<String,Double>> cityMapStart = horizontalAlgorithm.getFloorCityMap(floorParser(start));
-//            ElevatorNode optimalNode = dataPool.getOptimaleElevatorNode(A, B, C, start, floorParser(start), boomTime, horizontalAlgorithm, cityMapStart);
-//
-//            Map<String,Map<String,Double>> cityMapEnd = horizontalAlgorithm.getFloorCityMap(floorParser(end));
-//            ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, optimalNode.getArea(), cityMapStart);
-//            ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
-//
-//            returnArray.add(startPath);
-//            returnArray.add(endPath);
-//
-//            return returnArray;
-//        } else { // 같은 층수일 때 : 수직이동 없을 때
-//            Map<String,Map<String,Double>> cityMap = horizontalAlgorithm.getFloorCityMap(floorParser(start));
-//            ArrayList<String> path = horizontalAlgorithm.dijkstraReturnPath(start, end, cityMap);
-//
-//            returnArray.add(path);
-//
-//            return returnArray;
-//        }
-//    }
+    public ArrayList<ArrayList<String>> ddoGorithm_Stair(String start, String end) {
+        ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
+        if(floorParser(start) != floorParser(end)){ // 층수 다르면 수직이동이 포함된다.
+
+            StairNode D = dataPool.setStairNode("D", day, -3, 9);
+            StairNode E = dataPool.setStairNode("E", day, -3, 9);
+            StairNode F = dataPool.setStairNode("F", day, 1, 9);
+            StairNode G = dataPool.setStairNode("G", day, -6, 1);
+
+            Map<String,Map<String,Double>> cityMapStart = horizontalAlgorithm.getFloorCityMap(floorParser(start));
+            Map<String,Map<String,Double>> cityMapEnd = horizontalAlgorithm.getFloorCityMap(floorParser(end));
+            HashMap<Integer, String> sameStair = new HashMap<>();
+
+            for(Iterator iterator1 = cityMapStart.keySet().iterator() ; iterator1.hasNext();){
+                String keyName = (String)iterator1.next();
+                for(Iterator iterator2 = cityMapEnd.keySet().iterator() ; iterator2.hasNext();){
+                    if(keyName.equals((String)iterator2.next())){
+                        if(keyName.equals("D"))
+                            sameStair.put(0, keyName);
+                        if(keyName.equals("E"))
+                            sameStair.put(1, keyName);
+                        if(keyName.equals("F"))
+                            sameStair.put(2, keyName);
+                        if(keyName.equals("G"))
+                            sameStair.put(3, keyName);
+                    }
+                }
+            }
+
+            if(sameStair.size() == 0){
+                Map<String,Map<String,Double>> cityMapMiddle = horizontalAlgorithm.getFloorCityMap(1);
+                ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, "G", cityMapStart);
+
+                for(Iterator iterator1 = cityMapMiddle.keySet().iterator() ; iterator1.hasNext();){
+                    String keyName = (String)iterator1.next();
+                    for(Iterator iterator2 = cityMapEnd.keySet().iterator() ; iterator2.hasNext();){
+                        if(keyName.equals((String)iterator2.next())){
+                            if(keyName.equals("D"))
+                                sameStair.put(0, keyName);
+                            if(keyName.equals("E"))
+                                sameStair.put(1, keyName);
+                            if(keyName.equals("F"))
+                                sameStair.put(2, keyName);
+                            if(keyName.equals("G"))
+                                sameStair.put(3, keyName);
+                        }
+                    }
+                }
+
+                StairNode optimalNode = dataPool.getOptimalStairNode(D, E, F, G, "G", sameStair, horizontalAlgorithm, cityMapMiddle);
+
+                ArrayList<String> middlePath = horizontalAlgorithm.dijkstraReturnPath("G", optimalNode.getArea(), cityMapMiddle);
+                ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
+                returnArray.add(startPath);
+                returnArray.add(middlePath);
+                returnArray.add(endPath);
+            } else {
+                StairNode optimalNode = dataPool.getOptimalStairNode(D, E, F, G, start, sameStair, horizontalAlgorithm, cityMapStart);
+
+                ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, optimalNode.getArea(), cityMapStart);
+                ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
+                returnArray.add(startPath);
+                returnArray.add(endPath);
+            }
+
+            return returnArray;
+        } else { // 같은 층수일 때 : 수직이동 없을 때
+            Map<String,Map<String,Double>> cityMap = horizontalAlgorithm.getFloorCityMap(floorParser(start));
+            ArrayList<String> path = horizontalAlgorithm.dijkstraReturnPath(start, end, cityMap);
+
+            returnArray.add(path);
+
+            return returnArray;
+        }
+    }
 
     @Override
     public void onClick(View v){

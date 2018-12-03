@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import jxl.Sheet;
@@ -341,49 +342,96 @@ public class DataPool {
         return node;
     }
 
-    public ElevatorNode getOptimaleElevatorNode(ElevatorNode A, ElevatorNode B, ElevatorNode C, String startNode, int floor, boolean boomTime, HorizontalAlgorithm horizontalAlgorithm, Map<String,Map<String,Double>> cityMap){
-        ArrayList<String> fromA = horizontalAlgorithm.dijkstraReturnPath(startNode, A.area, cityMap);
-        ArrayList<String> fromB = horizontalAlgorithm.dijkstraReturnPath(startNode, B.area, cityMap);
-        ArrayList<String> fromC = horizontalAlgorithm.dijkstraReturnPath(startNode, C.area, cityMap);
-
-        double [][]spendAllTime = new double[3][2]; // 첫번째 : 시간, 두번째 : 거리 , 0 : A, 1 : B, 2 : C
+    public ElevatorNode getOptimaleElevatorNode(ElevatorNode A, ElevatorNode B, ElevatorNode C, String startNode, HashMap<Integer, String> elevatorMap, boolean boomTime, HorizontalAlgorithm horizontalAlgorithm, Map<String,Map<String,Double>> cityMap){
+            HashMap<String, ArrayList<String>> a = new HashMap<String, ArrayList<String>>();
+        double[][] spendAllTime = new double[elevatorMap.size()][2]; // 첫번째 : 시간, 두번째 : 거리 , 0 : A, 1 : B, 2 : C
 
         double minTime = 0;
         int minTimeNode = 0;
         int mindistNode = 0;
 
-        spendAllTime[0][1] = Double.parseDouble(fromA.get(fromA.size()-1));
-        spendAllTime[1][1] = Double.parseDouble(fromB.get(fromB.size()-1));
-        spendAllTime[2][1] = Double.parseDouble(fromC.get(fromC.size()-1));
-
-        if(boomTime){
-            spendAllTime[0][0] = Double.parseDouble(fromA.get(fromA.size()-1)) + A.spendTimeLongest;
-            spendAllTime[1][0] = Double.parseDouble(fromB.get(fromB.size()-1)) + B.spendTimeLongest;
-            spendAllTime[2][0] = Double.parseDouble(fromC.get(fromC.size()-1)) + C.spendTimeLongest;
-        } else {
-            spendAllTime[0][0] = Double.parseDouble(fromA.get(fromA.size()-1)) + A.spendTimeShortest;
-            spendAllTime[1][0] = Double.parseDouble(fromB.get(fromB.size()-1)) + B.spendTimeShortest;
-            spendAllTime[2][0] = Double.parseDouble(fromC.get(fromC.size()-1)) + C.spendTimeShortest;
+        for(Iterator iterator = elevatorMap.values().iterator() ; iterator.hasNext();){
+            String value = (String)iterator.next();
+            a.put(value, horizontalAlgorithm.dijkstraReturnPath(startNode, value, cityMap));
         }
 
-        minTime = spendAllTime[0][0];
-        for(int i = 1 ; i < 3 ; i++){
-            if(spendAllTime[i][0] < minTime){
-                minTime = spendAllTime[i][0];
-                mindistNode = i;
+        for(int i = 0 ; i < 3 ; i++){
+            if(boomTime) {
+                if(elevatorMap.containsKey(i)){
+                    if (i == 0)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + A.spendTimeLongest;
+                    if (i == 1)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + B.spendTimeLongest;
+                    if (i == 2)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + C.spendTimeLongest;
+                }
+            } else {
+                if(elevatorMap.containsKey(i)) {
+                    if (i == 0)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + A.spendTimeLongest;
+                    if (i == 1)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + B.spendTimeLongest;
+                    if (i == 2)
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + C.spendTimeLongest;
+                }
             }
+        }
+
+            minTime = spendAllTime[0][0];
+            for (int i = 1; i < elevatorMap.size(); i++) {
+                if (spendAllTime[i][0] < minTime) {
+                    minTime = spendAllTime[i][0];
+                    minTimeNode = i;
+                }
+            }
+            // 시간만 하고 거리 안함 할 것
+
+            if (minTimeNode == 0) {
+                return A;
+            } else if (minTimeNode == 1) {
+                return B;
+            } else
+                return C;
+    }
+//    public StairNode getOptimalStairNode
+    public StairNode getOptimalStairNode(StairNode D, StairNode E, StairNode F, StairNode G, String startNode,HashMap<Integer, String> stairMap, HorizontalAlgorithm horizontalAlgorithm, Map<String,Map<String,Double>> cityMap){
+        HashMap<String, ArrayList<String>> a = new HashMap<String, ArrayList<String>>();
+
+        double []allDist = new double[4]; //  0 : D, 1 : E, 2 : F, 3 : G
+
+        for(Iterator iterator = stairMap.values().iterator() ; iterator.hasNext();){
+            String value = (String)iterator.next();
+            a.put(value, horizontalAlgorithm.dijkstraReturnPath(startNode, value, cityMap));
+        }
+
+        for(int i = 0 ; i < 4 ; i ++){
+            if(stairMap.containsKey(i)) {
+                allDist[i] = Double.parseDouble(a.get(stairMap.get(i)).get(a.get(stairMap.get(i)).size() - 1));
+            } else{
+                allDist[i] = 9999;
+            }
+        }
+
+        double minDist = 0;
+        int minTimeNode = 0;
+        int mindistNode = 0;
+
+        minDist = allDist[0];
+        for(int i = 1 ; i < 4 ; i++){
+                if(allDist[i] < minDist && allDist[i] != 9999){
+                   minDist = allDist[i];
+                    mindistNode = i;
+                }
         }
         // 시간만 하고 거리 안함 할 것
 
         if(mindistNode == 0){
-            return A;
+            return D;
         } else if (mindistNode == 1){
-            return B;
+            return E;
+        } else if (mindistNode == 2) {
+            return F;
         } else
-            return C;
+            return G;
     }
-//    public StairNode getOptimalStairNode
-//    public StairNode getOptimalStairNode(StairNode D, StairNode E, StairNode F, StairNode G, HorizontalAlgorithm horizontalAlgorithm){
-//
-//    }
 }

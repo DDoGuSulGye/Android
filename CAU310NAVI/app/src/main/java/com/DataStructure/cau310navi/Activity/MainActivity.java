@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Integer classTime = new Integer(0);
                 boolean boomTime = false;
 
+                if(start.getText().equals("출발지 선택") || end.getText().equals("도착지 선택")){
+                    Toast.makeText(this,"출발지 또는 도착지를 선택해 주세요!", Toast.LENGTH_LONG);
+                    break;
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     hour = timePicker.getHour();
                     minute = timePicker.getMinute();
@@ -186,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(minute >= 0 && minute <= 10){
                     boomTime = true;
-                } else if(minute >= 40 && minute <60){
+                } else if(minute >= 40 && minute <60 && classTime != 9){
                     classTime++;
                     boomTime = true;
                 } else {
