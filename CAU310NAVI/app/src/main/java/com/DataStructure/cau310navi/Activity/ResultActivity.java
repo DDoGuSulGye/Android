@@ -50,11 +50,11 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
     DataPool dataPool;
     HorizontalAlgorithm horizontalAlgorithm;
-    ArrayList<ArrayList<String>> startToMiddleElevator;
-    ArrayList<ArrayList<String>> middleToEndElevator;
+    ArrayList<ArrayList<String>> startToMiddleElevator = null;
+    ArrayList<ArrayList<String>> middleToEndElevator = null;
 
-    ArrayList<ArrayList<String>> startToMiddleStair;
-    ArrayList<ArrayList<String>> middleToEndStair;
+    ArrayList<ArrayList<String>> startToMiddleStair = null;
+    ArrayList<ArrayList<String>> middleToEndStair = null;
 
     String day ;
     int hour ;
@@ -87,7 +87,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         if(middle.equals("")){ // 경유지 없을 때
             startToMiddleElevator = ddoGorithm_Elevator(start, end);
-
             startToMiddleStair = ddoGorithm_Stair(start, end);
         } else{
             startToMiddleElevator = ddoGorithm_Elevator(start, middle);
@@ -97,17 +96,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             middleToEndStair = ddoGorithm_Stair(middle, end);
         }
 
-        Bundle bundle1 = new Bundle();
-        bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
-        bundle1.putSerializable("LIST2", new DataHelper(middleToEndElevator));
-        elevator.setArguments(bundle1);
-
-        Bundle bundle2 = new Bundle();
-        bundle2.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
-        bundle2.putSerializable("LIST2", new DataHelper(middleToEndElevator));
-        stair.setArguments(bundle2);
-
-        setFrag(3);
+        setFrag(0);
     }
 
     public int floorParser(String area){
@@ -138,7 +127,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         dataPool = new DataPool(getApplicationContext());
         dataPool.fillClassNode();
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<ArrayList<String>> ddoGorithm_Elevator(String start, String end) {
@@ -276,16 +264,38 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void setFrag(int n){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
+    public void setFrag(int n){
         fm = getFragmentManager();
         tran = fm.beginTransaction();
         switch (n){
             case 0:
                 Toast toast = Toast.makeText(getApplicationContext(), "Fra1", Toast.LENGTH_LONG); toast.show();
+                Bundle bundle1 = new Bundle();
+                if(middleToEndElevator==null){
+                    //경유지 없는 경우
+                    bundle1.putInt("Type",0);
+                    bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
+                }else{
+                    bundle1.putInt("Type",1);
+                    bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
+                    bundle1.putSerializable("LIST2", new DataHelper(middleToEndElevator));
+                }
+                elevator.setArguments(bundle1);
                 tran.replace(R.id.main_frame, elevator);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
                 tran.commit();
                 break;
             case 1:
+                Bundle bundle2 = new Bundle();
+                if(middleToEndStair==null){
+                    //경유지 없는 경우
+                    bundle2.putInt("Type",0);
+                    bundle2.putSerializable("LIST1", new DataHelper(startToMiddleStair));
+                }else{
+                    bundle2.putInt("Type",1);
+                    bundle2.putSerializable("LIST1", new DataHelper(startToMiddleStair));
+                    bundle2.putSerializable("LIST2", new DataHelper(middleToEndStair));
+                }
+                stair.setArguments(bundle2);
                 Toast toast2 = Toast.makeText(getApplicationContext(), "Fra2", Toast.LENGTH_LONG); toast2.show();
                 tran.replace(R.id.main_frame, stair);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
                 tran.commit();
