@@ -46,7 +46,7 @@ public class Elevator_Fragment extends Fragment {
             distance = distance*7;
             distance = distance/60;
             totalDistance.setText("총 소요시간 : 약" +distance.intValue()+"분");
-            totalDistance.setTextColor(Color.parseColor("#000000"));
+            totalDistance.setTextColor(Color.parseColor("#ffffff"));
             topLL.addView(totalDistance);
             for(int i=0; i<data1.size(); i++) {
                 for(int j=0; j<data1.get(i).size()-1; j++){
@@ -58,7 +58,7 @@ public class Elevator_Fragment extends Fragment {
                     topTV1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     topTV1.setPadding(10, 10, 10, 10);
 
-                    topTV1.setTextColor(Color.parseColor("#000000"));
+                    topTV1.setTextColor(Color.parseColor("#ffffff"));
                     if((j==0)&&(i==0)||(i== data1.size()-1)&&(j==data1.get(i).size()-2)){
                         mainImage.setLayoutParams(new LinearLayout.LayoutParams(70, 70));
                         mainImage.setImageDrawable(view.getResources().getDrawable(R.drawable.mainnode));
@@ -94,7 +94,7 @@ public class Elevator_Fragment extends Fragment {
             totalDistance.setPadding(10, 10, 10, 10);
             totalDistance.setTextSize(30);
             distance = distance*7;
-            totalDistance.setTextColor(Color.parseColor("#000000"));
+            totalDistance.setTextColor(Color.parseColor("#ffffff"));
             distance = distance/60;
             totalDistance.setText("총 소요시간 : 약 "+distance.intValue()+"분");
             topLL.addView(totalDistance);
@@ -109,7 +109,7 @@ public class Elevator_Fragment extends Fragment {
                     topTV1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     topTV1.setPadding(10, 10, 10, 10);
 
-                    topTV1.setTextColor(Color.parseColor("#000000"));
+                    topTV1.setTextColor(Color.parseColor("#ffffff"));
                     if((j==0)&&(i==0)||(i== data1.size()-1)&&(j==data1.get(i).size()-2)){
                         mainImage.setLayoutParams(new LinearLayout.LayoutParams(70, 70));
                         mainImage.setImageDrawable(view.getResources().getDrawable(R.drawable.mainnode));
@@ -138,7 +138,7 @@ public class Elevator_Fragment extends Fragment {
                     mainLL.setOrientation(LinearLayout.HORIZONTAL);
                     topTV1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     topTV1.setPadding(10, 10, 10, 10);
-                    topTV1.setTextColor(Color.parseColor("#000000"));
+                    topTV1.setTextColor(Color.parseColor("#ffffff"));
                     if((j==0)&&(i==0)||(i== data2.size()-1)&&(j==data2.get(i).size()-2)){
                         mainImage.setLayoutParams(new LinearLayout.LayoutParams(70, 70));
                         mainImage.setImageDrawable(view.getResources().getDrawable(R.drawable.mainnode));

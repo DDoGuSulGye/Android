@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.search_btn :
+                Toast.makeText(getApplicationContext(), "검색중입니다.", Toast.LENGTH_SHORT).show();
                 Calendar cal = Calendar.getInstance();
                 Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
                 String day = new String("");
