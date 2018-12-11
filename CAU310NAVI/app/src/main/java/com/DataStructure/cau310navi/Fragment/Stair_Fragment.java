@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class Stair_Fragment extends Fragment {
 
     int resultType = 0;
+    int verticalTime = 0;
     ArrayList<ArrayList<String>> data1;
     ArrayList<ArrayList<String>> data2;
     View view;
@@ -36,6 +37,7 @@ public class Stair_Fragment extends Fragment {
         resultType= getArguments().getInt("Type");
         if(resultType==0){
             data1 = ((DataHelper)getArguments().getSerializable("LIST1")).getList(); //startToMiddleElevator
+            verticalTime = getArguments().getInt("VERTICAL_TIME", 0);
             for(int a = 0; a<data1.size(); a++){
                 distance+=Double.parseDouble(data1.get(a).get(data1.get(a).size()-1));
             }
@@ -44,8 +46,8 @@ public class Stair_Fragment extends Fragment {
             totalDistance.setPadding(10, 10, 10, 10);
             totalDistance.setTextSize(30);
             distance = distance*7;
-            distance = distance/60;
-            totalDistance.setText("총 소요시간 : 약" +distance.intValue()+"분");
+            distance += verticalTime;
+            totalDistance.setText("총 소요시간 : 약" +(int)(distance/60)+"분" + " " + (int)(distance%60) + "초");
             totalDistance.setTextColor(Color.parseColor("#ffffff"));
             topLL.addView(totalDistance);
             for(int i=0; i<data1.size(); i++) {
@@ -82,6 +84,7 @@ public class Stair_Fragment extends Fragment {
             ArrayList<String> routeList = new ArrayList<>();
             data1 = ((DataHelper)getArguments().getSerializable("LIST1")).getList(); //startToMiddleElevator
             data2 = ((DataHelper)getArguments().getSerializable("LIST2")).getList(); //middleToEndElevator
+            verticalTime = getArguments().getInt("VERTICAL_TIME", 0);
             //1. 시간 계산
             for(int a = 0; a<data1.size(); a++){
                 distance+=Double.parseDouble(data1.get(a).get(data1.get(a).size()-1));
@@ -95,8 +98,8 @@ public class Stair_Fragment extends Fragment {
             totalDistance.setTextSize(30);
             distance = distance*7;
             totalDistance.setTextColor(Color.parseColor("#ffffff"));
-            distance = distance/60;
-            totalDistance.setText("총 소요시간 : 약 "+distance.intValue()+"분3");
+            distance += verticalTime;
+            totalDistance.setText("총 소요시간 : 약" +(int)(distance/60)+"분" + " " + (int)(distance%60) + "초");
             topLL.addView(totalDistance);
             //2. 경로 넣기 start to middle
             for(int i=0; i<data1.size(); i++) {

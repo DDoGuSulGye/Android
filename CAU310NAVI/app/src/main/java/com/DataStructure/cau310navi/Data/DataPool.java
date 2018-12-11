@@ -282,22 +282,22 @@ public class DataPool {
         StairNode node = new StairNode(area, whatDay, lowest, highest);
         switch(area) {
             case "D" :
-                node.setTimeByStair(0);
+                node.setTimeByStair(16);
                 break;
             case "E" :
-                node.setTimeByStair(1);
+                node.setTimeByStair(16);
                 break;
             case "F" :
-                node.setTimeByStair(2);
+                node.setTimeByStair(16);
                 break;
             case "G" :
-                node.setTimeByStair(3);
+                node.setTimeByStair(16);
                 break;
         }
 
         return node;
     }
-    public ElevatorNode setElevatorNode(String area, String whatDay, int lowest, int highest, int myFloor, int classTime){
+    public ElevatorNode setElevatorNode(String area, String whatDay, int lowest, int highest, int myFloor, int classTime, boolean boomTime){
         ElevatorNode node = new ElevatorNode(area, whatDay, lowest, highest);
         int totalPeople = 0;
         int moveTotalFloor = highest-lowest;
@@ -329,8 +329,16 @@ public class DataPool {
         //Spend Time
 
         if(boomTime==true){
+            int k = 0;
+            if(node.count < 70 ){
+                k = 1;
+            } else if(node.count < 200){
+                k = 2;
+            } else{
+                k = 3;
+            }
             node.spendTimeShortest = (10*(moveTotalFloor)+1.5*(moveTotalFloor+1));
-            node.spendTimeLongest = ((10*(moveTotalFloor-1)+(1.5*moveTotalFloor)/2)*2)
+            node.spendTimeLongest = ((10*(moveTotalFloor-1)+(1.5*moveTotalFloor)/2)*k)
                     +(10*moveTotalFloor+1.5*(moveTotalFloor-1));
         }else{
             //붐비는 시간이 아닐 경우
@@ -368,11 +376,11 @@ public class DataPool {
             } else {
                 if(elevatorMap.containsKey(i)) {
                     if (i == 0)
-                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + A.spendTimeLongest;
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + A.spendTimeShortest;
                     if (i == 1)
-                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + B.spendTimeLongest;
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + B.spendTimeShortest;
                     if (i == 2)
-                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + C.spendTimeLongest;
+                        spendAllTime[i][0] = Double.parseDouble(a.get(elevatorMap.get(i)).get(a.get(elevatorMap.get(i)).size() - 1)) + C.spendTimeShortest;
                 }
             }
         }

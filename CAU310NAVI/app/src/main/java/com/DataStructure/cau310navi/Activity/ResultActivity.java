@@ -46,6 +46,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     ArrayList<ArrayList<String>> startToMiddleStair = null;
     ArrayList<ArrayList<String>> middleToEndStair = null;
 
+    int verticalTimeElevator = 0;
+    int verticalTimeStair = 0;
+
     String day ;
     int hour ;
     int minute ;
@@ -121,9 +124,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
         if(floorParser(start) != floorParser(end)){ // 층수 다르면 수직이동이 포함된다.
 
-            ElevatorNode A = dataPool.setElevatorNode("A", day, -6, 9, 1, classTime);
-            ElevatorNode B = dataPool.setElevatorNode("B", day, -3, 9, 1, classTime);
-            ElevatorNode C = dataPool.setElevatorNode("C", day, -3, 9, 1, classTime);
+            ElevatorNode A = dataPool.setElevatorNode("A", day, -6, 9, 1, classTime, boomTime);
+            ElevatorNode B = dataPool.setElevatorNode("B", day, -3, 9, 1, classTime, boomTime);
+            ElevatorNode C = dataPool.setElevatorNode("C", day, -3, 9, 1, classTime, boomTime);
 
             Map<String,Map<String,Double>> cityMapStart = horizontalAlgorithm.getFloorCityMap(floorParser(start));
             Map<String,Map<String,Double>> cityMapEnd = horizontalAlgorithm.getFloorCityMap(floorParser(end));
@@ -146,7 +149,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             ElevatorNode optimalNode = dataPool.getOptimaleElevatorNode(A, B, C, start, sameElevator, boomTime, horizontalAlgorithm, cityMapStart);
             ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, optimalNode.getArea(), cityMapStart);
             ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
-
+            verticalTimeElevator = (int)optimalNode.getSpendTimeLongest();
             returnArray.add(startPath);
             returnArray.add(endPath);
 
@@ -211,7 +214,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 StairNode optimalNode = dataPool.getOptimalStairNode(D, E, F, G, "G", sameStair, horizontalAlgorithm, cityMapMiddle);
-
+                verticalTimeStair = optimalNode.getTimeByStair() * ( optimalNode.getHighest() - optimalNode.getLowest());
                 ArrayList<String> middlePath = horizontalAlgorithm.dijkstraReturnPath("G", optimalNode.getArea(), cityMapMiddle);
                 ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
                 returnArray.add(startPath);
@@ -219,7 +222,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 returnArray.add(endPath);
             } else {
                 StairNode optimalNode = dataPool.getOptimalStairNode(D, E, F, G, start, sameStair, horizontalAlgorithm, cityMapStart);
-
+                verticalTimeStair = optimalNode.getTimeByStair() * ( optimalNode.getHighest() - optimalNode.getLowest());
                 ArrayList<String> startPath = horizontalAlgorithm.dijkstraReturnPath(start, optimalNode.getArea(), cityMapStart);
                 ArrayList<String> endPath = horizontalAlgorithm.dijkstraReturnPath(optimalNode.getArea(), end, cityMapEnd);
                 returnArray.add(startPath);
@@ -259,10 +262,12 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                     //경유지 없는 경우
                     bundle1.putInt("Type",0);
                     bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
+                    bundle1.putInt("VERTICAL_TIME", verticalTimeElevator);
                 }else{
                     bundle1.putInt("Type",1);
                     bundle1.putSerializable("LIST1", new DataHelper(startToMiddleElevator));
                     bundle1.putSerializable("LIST2", new DataHelper(middleToEndElevator));
+                    bundle1.putInt("VERTICAL_TIME", verticalTimeElevator);
                 }
                 elevator.setArguments(bundle1);
                 tran.replace(R.id.main_frame, elevator);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
@@ -274,10 +279,12 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                     //경유지 없는 경우
                     bundle2.putInt("Type",0);
                     bundle2.putSerializable("LIST1", new DataHelper(startToMiddleStair));
+                    bundle2.putInt("VERTICAL_TIME", verticalTimeStair);
                 }else{
                     bundle2.putInt("Type",1);
                     bundle2.putSerializable("LIST1", new DataHelper(startToMiddleStair));
                     bundle2.putSerializable("LIST2", new DataHelper(middleToEndStair));
+                    bundle2.putInt("VERTICAL_TIME", verticalTimeStair);
                 }
                 stair.setArguments(bundle2);
                 tran.replace(R.id.main_frame, stair);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
